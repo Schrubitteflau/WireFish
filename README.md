@@ -17,7 +17,7 @@ Il faudra ensuite décoder et analyser le trafic couche par couche en remontant 
 Ce programme sera en ligne de commandes et acceptera différents paramètres pour configurer son fonctionnement, comme l'interface à utiliser, le niveau de détail à afficher (payloads HTTP uniquement ? paquets et détails IP ? trames Ethernet ?), mais également des filtres éventuels à appliquer : IP, protocole applicatif, etc.
   
 ## Technologies utilisées
-Le langage python ainsi que la bibliothèque **scapy** seront utilisés
+Le langage python ainsi que la bibliothèque [**scapy**](https://scapy.net/) seront utilisés
 
 ## Différentes étapes à suivre
 1. Dans un premier temps, revoir rapidement les concepts et la syntaxe du Python
