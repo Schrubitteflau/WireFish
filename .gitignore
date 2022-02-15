@@ -1,1 +1,4 @@
-scapy-venv
+# venv of the project
+wirefish-venv/
+
+__pycache__/

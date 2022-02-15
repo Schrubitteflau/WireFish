@@ -22,9 +22,9 @@ Le langage python ainsi que la bibliothèque [**scapy**](https://scapy.net/) ser
 ## Différentes étapes à suivre
 1. Dans un premier temps, revoir rapidement les concepts et la syntaxe du Python
 2. En parallèle, réviser ses cours de réseau
-4. Se familiariser avec la bibliothèque scapy pour comprendre l'étendue de ce qu'il est possible de faire, ainsi que ses limitations
-5. Réaliser un prototype se contentant d'intercepter les trames Ethernet et d'afficher des informations élémentaires à leur propos : adresse MAC source et de destination
-6. Remonter les couches du modèle OSI pour gérer la couche réseau (IPv4), la couche transport (TCP, UDP), puis la couche application en implémentant certains protocoles très communs comme HTTP ou FTP
+3. Se familiariser avec la bibliothèque scapy pour comprendre l'étendue de ce qu'il est possible de faire, ainsi que ses limitations
+4. Réaliser un prototype se contentant d'intercepter les trames Ethernet et d'afficher des informations élémentaires à leur propos : adresse MAC source et de destination
+5. Remonter les couches du modèle OSI pour gérer la couche réseau (IPv4), la couche transport (TCP, UDP), puis la couche application en implémentant certains protocoles très communs comme HTTP ou FTP
 
 ## Fonctionnalités bonus
 Une fois l'outil en ligne de commande fonctionnel, de nombreuses perspectives d'améliorations s'offrent à nous :
