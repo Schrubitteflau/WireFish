@@ -49,12 +49,15 @@ parser_print_packets.add_argument(
 args = parser.parse_args()
 command_action = args.command_action
 
-if command_action == "show-interfaces":
-    actions.show_interfaces()
-elif command_action == "print-packets":
-    actions.print_packets(
-        interface=args.interface,
-        filter=args.filter
-    )
+try:
+    if command_action == "show-interfaces":
+        actions.show_interfaces()
+    elif command_action == "print-packets":
+        actions.print_packets(
+            interface=args.interface,
+            filter=args.filter
+        )
+except PermissionError:
+    print("You need to be root !")
 
 print(args)
