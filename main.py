@@ -15,13 +15,13 @@ subparsers = parser.add_subparsers(
     required=True
 )
 
-# Parser for the show-interfaces command
+# Parser for the show-interfaces action
 parser_show_interfaces = subparsers.add_parser(
     "show-interfaces",
     help="shows all available interfaces and their details"
 )
 
-# Parser for the print-packets command
+# Parser for the print-packets action
 parser_print_packets = subparsers.add_parser(
     "print-packets",
     help="starts listening to the packet through the specified interface"
@@ -46,6 +46,12 @@ parser_print_packets.add_argument(
     required=False
 )
 
+# Parser for the sniff-data action
+parser_sniff_data = subparsers.add_parser(
+    "sniff-data",
+    help="starts listening to the packet through the specified interface"
+)
+
 args = parser.parse_args()
 command_action = args.command_action
 
@@ -56,6 +62,14 @@ try:
         actions.print_packets(
             interface=args.interface,
             filter=args.filter
+        )
+    elif command_action == "sniff-data":
+        actions.sniff_data(
+            interface="lo",
+            sniff_modules="http.post_credentials,ftp.credentials"
+            #interface=args.interface,
+            #modules=args.modules,
+            #filter=args.filter
         )
 except PermissionError:
     print("You need to be root !")
