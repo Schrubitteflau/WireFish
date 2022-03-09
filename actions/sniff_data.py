@@ -3,27 +3,33 @@ import inspect
 from termcolor import colored
 from scapy.all import *
 
-from sniff_modules.BaseModule import BaseModule
+from sniff_modules.AbstractBaseModule import AbstractBaseModule
 
-ModulesList = List[BaseModule]
+ModulesList = List[AbstractBaseModule]
 
-def import_sniff_module(name: str) -> Optional[BaseModule]:
+def import_sniff_module(name: str) -> Optional[AbstractBaseModule]:
     to_print = "Loading module %s : " % (colored(name, "yellow"))
+
+    def end_with_error(error: str) -> None:
+        print(to_print + colored(error, "red"))
+        return None
+
     try:
+        # Dynamically import the module
         imported = __import__("sniff_modules.%s" % (name), fromlist=[ None ])
-        module_class = imported.Module
-        if inspect.isclass(module_class):
-            module_handler = module_class()
-            print(to_print + colored("Success", "green"))
-            return module_handler
-        print(to_print + colored("Must be a class", "red"))
-        return None
+        ModuleClass = imported.Module
+        # It must be a class which extends AbstractBaseModule (so it implements on_receive_packaet(self, packet: Packet))
+        if inspect.isclass(ModuleClass):
+            module_instance = ModuleClass()
+            if isinstance(module_instance, AbstractBaseModule):
+                print(to_print + colored("Success", "green"))
+                return module_instance
+            return end_with_error("Must extends AbstractBaseModule")
+        return end_with_error("Must be a class")
     except ModuleNotFoundError:
-        print(to_print + colored("Not found", "red"))
-        return None
+        return end_with_error("Not found")
     except TypeError as e:
-        print(to_print + colored(e, "red"))
-        return None
+        return end_with_error(str(e))
 
 
 def load_sniff_modules(modules_names: List[str]) -> ModulesList:
@@ -49,13 +55,17 @@ def sniff_data(interface: str, sniff_modules: str, filter: str = None) -> None:
 
     # [ "http.post_credentials", "ftp.credentials" ]
     modules_names = sniff_modules.split(",")
+
+    print("Sniffing data on interface %s using filter '%s' and modules %s" % (
+        interface,
+        "<no filter>" if filter is None else filter,
+        modules_names
+    ))
+
+
     loaded_modules = load_sniff_modules(modules_names)
 
-    print("Enabling modules %s on interface %s using filter '%s'" % (
-        interface,
-        modules_names,
-        "<no filter>" if filter is None else filter
-    ))
+
 
     #sniff(iface=interface, prn=lambda packet: process_packet(packet, loaded_modules))
 
