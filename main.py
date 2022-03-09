@@ -65,10 +65,10 @@ try:
         )
     elif command_action == "sniff-data":
         actions.sniff_data(
-            #interface="lo",
-            interface="wlp164s0",
-            sniff_modules="ftp.credentials"
-            #sniff_modules="http.post_credentials,ftp.credentials"
+            interface="lo",
+            #interface="wlp164s0",
+            #sniff_modules="ftp.credentials"
+            sniff_modules="http.post_credentials,ftp.credentials"
             #interface=args.interface,
             #modules=args.modules,
             #filter=args.filter

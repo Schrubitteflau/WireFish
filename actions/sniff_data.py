@@ -44,7 +44,6 @@ def load_sniff_modules(modules_names: List[str]) -> ModulesList:
 
 
 def process_packet(packet: Packet, modules: ModulesList) -> None:
-    #print(packet.summary())
     for module in modules:
         module.on_receive_packet(packet)
 
@@ -66,4 +65,5 @@ def sniff_data(interface: str, sniff_modules: str, filter: str = None) -> None:
     loaded_modules = load_sniff_modules(modules_names)
 
     sniff(iface=interface, prn=lambda packet: process_packet(packet, loaded_modules))
+    #sniff(prn=lambda packet: process_packet(packet, loaded_modules))
 
