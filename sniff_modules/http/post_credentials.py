@@ -1,20 +1,17 @@
 from scapy.all import *
 from scapy.layers.http import HTTPRequest
+
 from sniff_modules.AbstractBaseModule import AbstractBaseModule
 
 class Module(AbstractBaseModule):
-    def on_receive_packaet(self, packet: Packet) -> None:
+    def on_receive_packet(self, packet: Packet) -> None:
         if packet.haslayer(HTTPRequest):
-            # if this packet is an HTTP Request
-            # get the requested URL
-            url = packet[HTTPRequest].Host.decode() + packet[HTTPRequest].Path.decode()
-            # get the requester's IP Address
-            ip = packet[IP].src
-            # get the request method
-            method = packet[HTTPRequest].Method.decode()
-            print(f"\n[+] {ip} Requested {url} with {method}")
-            if show_raw and packet.haslayer(Raw) and method == "POST":
-                # if show_raw flag is enabled, has raw data, and the requested method is "POST"
-                # then show raw
-                print(f"\n[*] Some useful Raw data: {packet[Raw].load}")
+            request = packet[HTTPRequest]
+
+            request_url = request.Host.decode() + request.Path.decode()
+            request_method = request.Method.decode()
+
+            print("%s %s" % (request_method, request_url))
+            if request_method == "POST" and packet.haslayer(Raw):
+                print(packet[Raw].load)
 

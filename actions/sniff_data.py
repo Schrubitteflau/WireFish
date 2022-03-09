@@ -44,6 +44,7 @@ def load_sniff_modules(modules_names: List[str]) -> ModulesList:
 
 
 def process_packet(packet: Packet, modules: ModulesList) -> None:
+    #print(packet.summary())
     for module in modules:
         module.on_receive_packet(packet)
 
@@ -56,16 +57,13 @@ def sniff_data(interface: str, sniff_modules: str, filter: str = None) -> None:
     # [ "http.post_credentials", "ftp.credentials" ]
     modules_names = sniff_modules.split(",")
 
-    print("Sniffing data on interface %s using filter '%s' and modules %s" % (
+    print("Sniffing interface %s using filter '%s' and modules %s" % (
         interface,
         "<no filter>" if filter is None else filter,
         modules_names
     ))
 
-
     loaded_modules = load_sniff_modules(modules_names)
 
-
-
-    #sniff(iface=interface, prn=lambda packet: process_packet(packet, loaded_modules))
+    sniff(iface=interface, prn=lambda packet: process_packet(packet, loaded_modules))
 
