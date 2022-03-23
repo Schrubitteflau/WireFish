@@ -3,10 +3,7 @@
 import argparse
 from scapy.all import *
 
-from actions import *
 import actions
-
-interfaces = get_if_list()
 
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(
@@ -33,7 +30,6 @@ parser_print_packets.add_argument(
     "--interface",
     dest="interface",
     action="store",
-    choices=interfaces,
     required=True
 )
 
@@ -52,6 +48,24 @@ parser_sniff_data = subparsers.add_parser(
     help="starts listening to the packet through the specified interface"
 )
 
+parser_sniff_data.add_argument(
+    "-I",
+    "--interfaces",
+    dest="interfaces",
+    action="store",
+    required=True,
+    help="A comma-separated list of the interfaces to listen on, or the value 'ALL'. For example : 'wlan0,lo,eth1'"
+)
+
+parser_sniff_data.add_argument(
+    "-M",
+    "--modules",
+    dest="modules",
+    action="store",
+    required=True,
+    help="A comma-separated list of the modules to use. For example : 'http.post_credentials,ftp.credentials'"
+)
+
 args = parser.parse_args()
 command_action = args.command_action
 
@@ -59,20 +73,21 @@ try:
     if command_action == "show-interfaces":
         actions.show_interfaces()
     elif command_action == "print-packets":
+        interfaces = get_if_list() if args.interfaces == "ALL" else args.interfaces.split(",")
         actions.print_packets(
-            interface=args.interface,
+            interfaces=interfaces,
             filter=args.filter
         )
     elif command_action == "sniff-data":
+        sniff_modules = args.modules.split(",")
+        interfaces = get_if_list() if args.interfaces == "ALL" else args.interfaces.split(",")
         actions.sniff_data(
-            interface="lo",
-            #interface="wlp164s0",
-            #sniff_modules="ftp.credentials"
-            sniff_modules="http.post_credentials,ftp.credentials"
-            #interface=args.interface,
-            #modules=args.modules,
+            sniff_modules=["http.post_credentials","ftp.credentials"],
+            #sniff_modules=sniff_modules,
+            interfaces=interfaces,
             #filter=args.filter
         )
+
 except PermissionError:
     print("You need to be root !")
 
