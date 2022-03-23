@@ -18,7 +18,7 @@ def import_sniff_module(name: str) -> Optional[AbstractBaseModule]:
         # Dynamically import the module
         imported = __import__("sniff_modules.%s" % (name), fromlist=[ None ])
         ModuleClass = imported.Module
-        # It must be a class which extends AbstractBaseModule (so it implements on_receive_packaet(self, packet: Packet))
+        # It must be a class which extends AbstractBaseModule
         if inspect.isclass(ModuleClass):
             module_instance = ModuleClass()
             if isinstance(module_instance, AbstractBaseModule):
@@ -48,22 +48,18 @@ def process_packet(packet: Packet, modules: ModulesList) -> None:
         module.on_receive_packet(packet)
 
 
-# interface : the name of the interface to listen on ("wlan0", "lo", ...)
+# interface : the interface(s) to listen on ("wlan0", "lo", ...)
 # sniff_modules : a comma-separated list of the modules to use ("http.post_credentials,ftp.credentials")
 # filter : 
-def sniff_data(interface: str, sniff_modules: str, filter: str = None) -> None:
-
-    # [ "http.post_credentials", "ftp.credentials" ]
-    modules_names = sniff_modules.split(",")
+def sniff_data(interfaces: List[str], sniff_modules: List[str], filter: str = None) -> None:
 
     print("Sniffing interface %s using filter '%s' and modules %s" % (
-        interface,
+        interfaces,
         "<no filter>" if filter is None else filter,
-        modules_names
+        sniff_modules
     ))
 
-    loaded_modules = load_sniff_modules(modules_names)
+    loaded_modules = load_sniff_modules(sniff_modules)
 
-    sniff(iface=interface, prn=lambda packet: process_packet(packet, loaded_modules))
-    #sniff(prn=lambda packet: process_packet(packet, loaded_modules))
+    sniff(iface=interfaces, prn=lambda packet: process_packet(packet, loaded_modules))
 
