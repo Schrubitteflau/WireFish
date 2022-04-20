@@ -1,7 +1,8 @@
 #! wirefish-venv/bin/python
 
 import argparse
-from scapy.all import *
+
+from scapy.all import get_if_list
 
 import actions
 

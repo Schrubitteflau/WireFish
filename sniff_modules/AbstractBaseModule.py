@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
+
 from termcolor import colored
-from scapy.all import *
+from scapy.all import Packet
 
 class AbstractBaseModule(ABC):
 
