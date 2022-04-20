@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <meta charset="utf8" />
+        <title>Dashboard</title>
+    </head>
+
+    <body>
+        <h1>Bonjour, <%= username %></h1>
+
+        <h2>Envoyer un fichier</h2>
+        <form action="upload" method="POST" enctype="multipart/form-data">
+            <label for="file">File :</label>
+            <input type="file" id="file" name="file" />
+            <input type="submit" value="Envoyer" />
+        </form>
+
+        <h2>Vos fichiers</h2>
+
+        <ul>
+            <% for (const file of files) { %>
+                <li>
+                    <a href="/uploads/<%= file %>" download="<%= file %>"><%= file %></a>                    
+                </li>
+            <% } %>
+        </ul>
+    </body>
+
+</html>
