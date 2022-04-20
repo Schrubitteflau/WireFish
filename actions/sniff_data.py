@@ -1,8 +1,8 @@
 from typing import Optional, List
 import inspect
-from termcolor import colored
-from scapy.all import *
 
+from termcolor import colored
+from scapy.all import Packet, sniff
 from sniff_modules.AbstractBaseModule import AbstractBaseModule
 
 ModulesList = List[AbstractBaseModule]
@@ -12,7 +12,6 @@ def import_sniff_module(name: str) -> Optional[AbstractBaseModule]:
 
     def end_with_error(error: str) -> None:
         print(to_print + colored(error, "red"))
-        return None
 
     try:
         # Dynamically import the module
@@ -24,12 +23,17 @@ def import_sniff_module(name: str) -> Optional[AbstractBaseModule]:
             if isinstance(module_instance, AbstractBaseModule):
                 print(to_print + colored("Success", "green"))
                 return module_instance
-            return end_with_error("Must extends AbstractBaseModule")
-        return end_with_error("Must be a class")
+            end_with_error("Must extends AbstractBaseModule")
+            return None
+        end_with_error("Must be a class")
+        return None
     except ModuleNotFoundError:
-        return end_with_error("Not found")
+        # This error is also raised if the module code contains an error
+        end_with_error("Not found or error")
+        return None
     except TypeError as e:
-        return end_with_error(str(e))
+        end_with_error(str(e))
+        return None
 
 
 def load_sniff_modules(modules_names: List[str]) -> ModulesList:
