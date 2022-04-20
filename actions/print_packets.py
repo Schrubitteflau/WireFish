@@ -1,4 +1,6 @@
-from scapy.all import *
+from typing import List
+
+from scapy.all import sniff
 
 def print_packets(interfaces: List[str], filter: str = None) -> None:
     # sniff() has count, filter, iface, lfilter, prn, timeout options
