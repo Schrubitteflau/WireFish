@@ -1,6 +1,7 @@
 from scapy.all import *
 
 from sniff_modules.AbstractBaseModule import AbstractBaseModule
+from util.packet_analyze.ftp import FTPPacketParser
 
 class Module(AbstractBaseModule):
 
@@ -9,12 +10,9 @@ class Module(AbstractBaseModule):
 
     def on_receive_packet(self, packet: Packet) -> None:
         if packet.haslayer(TCP) and packet.haslayer(Raw):
-            raw_data = packet[Raw].load
+            ftp_packet_parser = FTPPacketParser(packet=packet)
 
-            if raw_data.startswith(b"USER "):
-                username = raw_data.split(b"USER ")[1].strip()
-                self.log("FTP username : %s " % (username))
-            if raw_data.startswith(b"PASSWORD "):
-                password = raw_data.split(b"PASSWORD ")[1].strip()
-                self.log("FTP password : %s " % (password))
-
+            if ftp_packet_parser.is_command("USER"):
+                self.log("FTP username : %s " % (ftp_packet_parser.get_parameters()))
+            elif ftp_packet_parser.is_command("PASS"):
+                self.log("FTP password : %s " % (ftp_packet_parser.get_parameters()))
