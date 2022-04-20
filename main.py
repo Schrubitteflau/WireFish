@@ -28,8 +28,8 @@ parser_print_packets = subparsers.add_parser(
 # Argument used to specify the interface to listen packets on
 parser_print_packets.add_argument(
     "-I",
-    "--interface",
-    dest="interface",
+    "--interfaces",
+    dest="interfaces",
     action="store",
     required=True,
     help="A comma-separated list of the interface(s) to listen on, or the value 'ALL'. For example : 'wlan0,lo,eth1'"
