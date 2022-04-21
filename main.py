@@ -84,7 +84,7 @@ try:
         sniff_modules = args.modules.split(",")
         interfaces = get_if_list() if args.interfaces == "ALL" else args.interfaces.split(",")
         actions.sniff_data(
-            sniff_modules=["http.post_credentials","ftp.credentials"],
+            sniff_modules=["http.post_credentials", "ftp.credentials", "ftp.save_files"],
             #sniff_modules=sniff_modules,
             interfaces=interfaces,
             #filter=args.filter
