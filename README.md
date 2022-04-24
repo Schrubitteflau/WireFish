@@ -42,3 +42,9 @@ Une fois l'outil en ligne de commande fonctionnel, de nombreuses perspectives d'
 ## Difficultés techniques
 - La bibliothèque scapy semble très complète et est utilisée par de nombreux outils, mais une courbe d'apprentissage sera ajoutée
 - Bien appréhender les notions de réseau sera un prérequis qu'il ne faudra pas prendre à la légère 
+
+# Installation
+
+L'utilisation de `Python 3.8` est recommandée.
+
+Il suffit de lancer le script d'installation `setup.sh`, qui va créer un environnement virtuel et installer toutes les dépendances au projet.
