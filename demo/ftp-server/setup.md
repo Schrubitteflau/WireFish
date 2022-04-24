@@ -6,7 +6,7 @@ sudo systemctl start vsftpd
 sudo systemctl enable vsftpd
 sudo useradd -m ftpuser
 sudo passwd ftpuser
-mdp : magsize01
+mdp : passw0rd
 
 Décommenter #write_enable=YES dans /etc/vsftpd.conf
 
