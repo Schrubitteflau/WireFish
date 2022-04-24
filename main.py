@@ -2,9 +2,11 @@
 
 import argparse
 
-from scapy.all import get_if_list
+from scapy.all import get_if_list, conf
 
 import actions
+
+conf.use_pcap = True
 
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(
