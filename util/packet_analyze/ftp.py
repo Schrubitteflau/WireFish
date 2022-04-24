@@ -1,5 +1,5 @@
 import re
-from typing import Optional, Tuple, Dict
+from typing import Optional, Tuple, Dict, Callable, Any
 
 from scapy.all import Packet, Raw, IP, TCP, NoPayload
 from util.misc import add_space_and_encode_to_bytes
@@ -71,15 +71,31 @@ class FTPPacketParser:
         return None
 
 
+
 class FTPPassiveModeHandler:
     def __init__(self, client_ip: str, client_port: int) -> None:
-        self._client_ip = client_ip
-        self._client_port = client_port
+        self._client_ip: str = client_ip
+        self._client_port: int = client_port
+        self._data: bytearray = bytearray()
+        # Callback called when the instance is destroyed
+        # This FTPPassiveModeHandler instance should be destroyed by a FTPPassiveModeHandlerCollection
+        # when there's no data anymore
+        self._on_stream_end_callback: Optional[Callable[[FTPPassiveModeHandler, bytearray], None]] = None
+
+    def __del__(self) -> None:
+        if callable(self._on_stream_end_callback):
+            self._on_stream_end_callback(self, self._data)
+
+    # Signature of callback should be : Callable[[FTPPassiveModeHandler, bytearray], None]
+    def on_stream_end(self, callback: Callable[[Any, bytearray], None]):
+        self._on_stream_end_callback = callback
 
     def handle_packet(self, packet: Packet) -> None:
         # We assume that the packet has already been checked before and that it is destinated to this handler
         payload = packet[TCP].payload
         if not isinstance(payload, NoPayload):
+            raw_data: bytes = payload.load
+            self._data.extend(raw_data)
             print("{}:{} => handle payload size : {}".format(self._client_ip, self._client_port, len(payload)))
 
 
@@ -111,6 +127,11 @@ class FTPPassiveModeHandlerCollection:
 
     def destroy_all_handlers(self) -> None:
         self._passive_mode_handlers.clear()
+    
+    def get_last_created_handler(self) -> Optional[FTPPassiveModeHandler]:
+        if self._last_created_handler_key is not None:
+            return self._passive_mode_handlers[self._last_created_handler_key]
+        return None
     
     def print(self) -> None:
         print(self._passive_mode_handlers)
