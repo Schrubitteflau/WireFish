@@ -9,5 +9,3 @@ sudo passwd ftpuser
 mdp : passw0rd
 
 Décommenter #write_enable=YES dans /etc/vsftpd.conf
-
-Le mode passif n'est pas bien pris en charge par WireFish, donc activer le mode de transfert Actif dans FileZilla
