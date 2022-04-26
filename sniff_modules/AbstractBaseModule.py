@@ -17,19 +17,20 @@ class AbstractBaseModule(ABC):
     def on_receive_packet(self, packet: Packet) -> None:
         pass
 
-    def log(self, message: str, color: str = "white") -> None:
+    def log(self, message: str, log_type: str = "info", message_color: str = "white") -> None:
         current_time = datetime.now().strftime("%H:%M:%S")
-        print("%s - %s : %s" % (
+        print("%s - %s - %s : %s" % (
             colored(current_time, "blue"),
+            colored(log_type, "white"),
             colored(self.module_name(), "yellow"),
-            colored(message, color)
+            colored(message, message_color)
         ))
 
     def log_message(self, message: str) -> None:
-        self.log(message, "white")
-    
+        self.log(message=message, message_color="white")
+
     def log_error(self, error_message: str) -> None:
-        self.log(error_message, "red")
+        self.log(message=error_message, log_type="error", message_color="red")
 
     def write_file(self, filename: str, content: Union[bytes, bytearray], append_flag: bool = False) -> Tuple[str, int]:
         open_mode = "ab" if append_flag else "wb"
