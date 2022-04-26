@@ -1,8 +1,5 @@
 # venv of the project
 wirefish-venv
 
-# Files stored by the modules
-sniff_files/*
-
 __pycache__
 .mypy_cache
