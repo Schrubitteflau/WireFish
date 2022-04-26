@@ -13,8 +13,8 @@ class Module(AbstractBaseModule):
         return "ftp.save_files"
 
     def _handle_retr_command(self, filename: str, data: bytearray) -> None:
-        written_size = self.write_file(filename=filename, content=data)
-        self.log_message("RETR {} : written file of length {} bytes".format(filename, written_size))
+        (file_path, written_size) = self.write_file(filename=filename, content=data)
+        self.log_message("RETR {} : written {} ({} bytes)".format(filename, file_path, written_size))
 
     def on_receive_packet(self, packet: Packet) -> None:
         passive_mode_handler = self._opened_passive_modes.get_handler_for_packet(packet=packet)
@@ -38,7 +38,7 @@ class Module(AbstractBaseModule):
             # Code "421 Timeout."
             elif ftp_packet_parser.is_timeout_response():
                 self._opened_passive_modes.destroy_all_handlers()
-            
+
             # Retrieve (get/download) a file
             elif ftp_packet_parser.is_command("RETR"):
                 filename: str = ftp_packet_parser.get_parameters().decode()

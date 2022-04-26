@@ -1,6 +1,8 @@
 import re
 from typing import Optional, Tuple, Dict, Callable, Any
+from datetime import datetime, timedelta
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from scapy.all import Packet, Raw, IP, TCP, NoPayload
 from util.misc import add_space_and_encode_to_bytes
 
@@ -81,6 +83,7 @@ class FTPPassiveModeHandler:
         # This FTPPassiveModeHandler instance should be destroyed by a FTPPassiveModeHandlerCollection
         # when there's no data anymore
         self._on_stream_end_callback: Optional[Callable[[FTPPassiveModeHandler, bytearray], None]] = None
+        self.last_data_received_time = datetime.now()
 
     def __del__(self) -> None:
         if callable(self._on_stream_end_callback):
@@ -96,14 +99,26 @@ class FTPPassiveModeHandler:
         if not isinstance(payload, NoPayload):
             raw_data: bytes = payload.load
             self._data.extend(raw_data)
+            self.last_data_received_time = datetime.now()
             print("{}:{} => handle payload size : {}".format(self._client_ip, self._client_port, len(payload)))
 
 
 class FTPPassiveModeHandlerCollection:
     def __init__(self) -> None:
         # Key : "IP:PORT", value : FTPPassiveModeHandler instance
-        self._passive_mode_handlers: Dict = {}
+        self._passive_mode_handlers: Dict[str, FTPPassiveModeHandler] = {}
         self._last_created_handler_key: Optional[str] = None
+        # Clean FTPPassiveModeHandler instances which haven't be cleaned properly if they
+        # didn't receive data for a specified time
+        self._scheduler = BackgroundScheduler()
+        self._clean_job = self._scheduler.add_job(self._clean_unused_handlers, 'interval', seconds=1)
+        self._scheduler.start()
+
+    def _clean_unused_handlers(self) -> None:
+        for key in list(self._passive_mode_handlers):
+            handler = self._passive_mode_handlers[key]
+            if handler.last_data_received_time + timedelta(seconds=5) < datetime.now():
+                del self._passive_mode_handlers[key]
 
     def _make_key(self, ip: str, port: int) -> str:
         return "{}:{}".format(ip, port)
@@ -121,7 +136,6 @@ class FTPPassiveModeHandlerCollection:
         self._last_created_handler_key = key
 
     def destroy_last_created_handler(self) -> None:
-        print("destroy_last_created_handler")
         if self._last_created_handler_key is not None:
             del self._passive_mode_handlers[self._last_created_handler_key]
             self._last_created_handler_key = None
