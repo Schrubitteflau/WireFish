@@ -121,6 +121,7 @@ class FTPPassiveModeHandlerCollection:
         self._last_created_handler_key = key
 
     def destroy_last_created_handler(self) -> None:
+        print("destroy_last_created_handler")
         if self._last_created_handler_key is not None:
             del self._passive_mode_handlers[self._last_created_handler_key]
             self._last_created_handler_key = None

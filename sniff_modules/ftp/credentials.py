@@ -13,6 +13,6 @@ class Module(AbstractBaseModule):
             ftp_packet_parser = FTPPacketParser(packet=packet)
 
             if ftp_packet_parser.is_command("USER"):
-                self.log("FTP username : %s " % (ftp_packet_parser.get_parameters()))
+                self.log_message("FTP username : %s " % (ftp_packet_parser.get_parameters().decode()))
             elif ftp_packet_parser.is_command("PASS"):
-                self.log("FTP password : %s " % (ftp_packet_parser.get_parameters()))
+                self.log_message("FTP password : %s " % (ftp_packet_parser.get_parameters().decode()))

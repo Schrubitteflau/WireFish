@@ -32,12 +32,12 @@ class Module(AbstractBaseModule):
         request_url = request.Host.decode() + request.Path.decode()
         request_method = request.Method.decode()
 
-        self.log("%s %s" % (request_method, request_url))
+        self.log_message("%s %s" % (request_method, request_url))
         if request_method == "POST" and packet.haslayer(Raw):
-            self.log(packet[Raw].load)
+            self.log_message(packet[Raw].load)
 
     def handle_http_response(self, packet: Packet, response: HTTPResponse) -> None:
         response_code = response.Status_Code
         reponse_set_cookie = response.Set_Cookie
 
-        self.log("Reponse : %s, cookies : %s" % (response_code, reponse_set_cookie))
+        self.log_message("Reponse : %s, cookies : %s" % (response_code, reponse_set_cookie))
