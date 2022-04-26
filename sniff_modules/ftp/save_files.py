@@ -16,6 +16,10 @@ class Module(AbstractBaseModule):
         (file_path, written_size) = self.write_file(filename=filename, content=data)
         self.log_message("RETR {} : written {} ({} bytes)".format(filename, file_path, written_size))
 
+    def _handle_stor_command(self, filename: str, data: bytearray) -> None:
+        (file_path, written_size) = self.write_file(filename=filename, content=data)
+        self.log_message("STOR {} : written {} ({} bytes)".format(filename, file_path, written_size))
+
     def on_receive_packet(self, packet: Packet) -> None:
         passive_mode_handler = self._opened_passive_modes.get_handler_for_packet(packet=packet)
 
@@ -50,4 +54,12 @@ class Module(AbstractBaseModule):
                 # between the client and the server : command return ? file content ?
                 last_handler = self._opened_passive_modes.get_last_created_handler()
                 last_handler.on_stream_end(lambda handler, data : self._handle_retr_command(filename, data))
+
+            # Upload (store) a file
+            elif ftp_packet_parser.is_command("STOR"):
+                filename: str= ftp_packet_parser.get_parameters().decode()
+                self.log_message("STOR {}".format(filename))
+                # Same process as RETR command above
+                last_handler = self._opened_passive_modes.get_last_created_handler()
+                last_handler.on_stream_end(lambda handler, data : self._handle_stor_command(filename, data))
 
