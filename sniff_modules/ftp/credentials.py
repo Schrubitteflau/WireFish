@@ -1,4 +1,4 @@
-from scapy.all import *
+from scapy.all import TCP, Packet, Raw
 
 from sniff_modules.AbstractBaseModule import AbstractBaseModule
 from util.packet_analyze.ftp import FTPPacketParser

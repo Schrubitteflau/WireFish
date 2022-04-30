@@ -1,5 +1,5 @@
 import os
-from typing import Union, Tuple
+from typing import Union, Tuple, Any
 from abc import ABC, abstractmethod
 from datetime import datetime
 
@@ -32,7 +32,7 @@ class AbstractBaseModule(ABC):
     def log_error(self, error_message: str) -> None:
         self.log(message=error_message, log_type="error", message_color="red")
 
-    def write_file(self, filename: str, content: Union[bytes, bytearray], append_flag: bool = False) -> Tuple[str, int]:
+    def write_binary_file(self, filename: str, content: Union[bytes, bytearray], append_flag: bool = False) -> Tuple[str, int]:
         open_mode = "ab" if append_flag else "wb"
         timestamp_now = int(datetime.timestamp(datetime.now()))
         real_filename = "{}_{}".format(timestamp_now, filename)
@@ -44,4 +44,16 @@ class AbstractBaseModule(ABC):
                 return (file_path, written_size)
         except Exception as e:
             self.log_error(e)
+
+    def to_str_safe(self, data: Any) -> str:
+        data_type = type(data)
+        if data_type is str:
+            return data
+        elif data_type is bytes:
+            return data.decode("utf-8")
+        elif data_type is int or data_type is float:
+            return str(data_type)
+        elif data is None:
+            return "<no-data>"
+        return "<AbstractBaseModule.to_str_safe()::unsupported-input>"
 

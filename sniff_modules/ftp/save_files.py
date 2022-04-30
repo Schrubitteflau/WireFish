@@ -13,11 +13,11 @@ class Module(AbstractBaseModule):
         return "ftp.save_files"
 
     def _handle_retr_command(self, filename: str, data: bytearray) -> None:
-        (file_path, written_size) = self.write_file(filename=filename, content=data)
+        (file_path, written_size) = self.write_binary_file(filename=filename, content=data)
         self.log_message("RETR {} : written {} ({} bytes)".format(filename, file_path, written_size))
 
     def _handle_stor_command(self, filename: str, data: bytearray) -> None:
-        (file_path, written_size) = self.write_file(filename=filename, content=data)
+        (file_path, written_size) = self.write_binary_file(filename=filename, content=data)
         self.log_message("STOR {} : written {} ({} bytes)".format(filename, file_path, written_size))
 
     def on_receive_packet(self, packet: Packet) -> None:
