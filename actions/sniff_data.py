@@ -28,9 +28,9 @@ def import_sniff_module(name: str) -> Optional[AbstractBaseModule]:
             return None
         end_with_error("Must be a class")
         return None
-    except ModuleNotFoundError:
+    except ModuleNotFoundError as e:
         # This error is also raised if the module code contains an error
-        end_with_error("Not found or error")
+        end_with_error("Not found or error : %s" % (e))
         return None
     except TypeError as e:
         end_with_error(str(e))
