@@ -21,6 +21,7 @@ def import_sniff_module(name: str) -> Optional[AbstractBaseModule]:
         if inspect.isclass(ModuleClass):
             module_instance = ModuleClass()
             if isinstance(module_instance, AbstractBaseModule):
+                module_instance.set_module_name(name)
                 print(to_print + colored("Success", "green"))
                 return module_instance
             end_with_error("Must extends AbstractBaseModule")

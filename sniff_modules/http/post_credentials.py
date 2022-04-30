@@ -6,9 +6,6 @@ from util.packet_analyze.http import HTTPPacketParser
 
 class Module(AbstractBaseModule):
 
-    def module_name(self) -> str:
-        return "http.post_credentials"
-
     def on_receive_packet(self, packet: Packet) -> None:
         parser = HTTPPacketParser(packet=packet)
         result_packet = parser.analyze()

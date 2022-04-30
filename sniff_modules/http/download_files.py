@@ -18,9 +18,6 @@ class Module(AbstractBaseModule):
             "font/woff2"
         ]
 
-    def module_name(self) -> str:
-        return "http.download_files"
-
     def on_receive_packet(self, packet: Packet) -> None:
         parser = HTTPPacketParser(packet=packet)
         result_packet = parser.analyze()

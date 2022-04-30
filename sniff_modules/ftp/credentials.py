@@ -5,9 +5,6 @@ from util.packet_analyze.ftp import FTPPacketParser
 
 class Module(AbstractBaseModule):
 
-    def module_name(self) -> str:
-        return "ftp.credentials"
-
     def on_receive_packet(self, packet: Packet) -> None:
         if packet.haslayer(TCP) and packet.haslayer(Raw):
             ftp_packet_parser = FTPPacketParser(packet=packet)

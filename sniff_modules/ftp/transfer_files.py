@@ -9,9 +9,6 @@ class Module(AbstractBaseModule):
         super().__init__()
         self._opened_passive_modes = FTPPassiveModeHandlerCollection()
 
-    def module_name(self) -> str:
-        return "ftp.transfer_files"
-
     def _handle_retr_command(self, filename: str, data: bytearray) -> None:
         (file_path, written_size) = self.write_binary_file(filename=filename, content=data)
         self.log_message("RETR {} : written {} ({} bytes)".format(filename, file_path, written_size))
