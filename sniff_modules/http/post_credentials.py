@@ -30,12 +30,10 @@ class Module(AbstractBaseModule):
         ))
         if request_method == "POST" and original_packet.haslayer(Raw):
             self.log_message(original_packet[Raw].load)
-        request.show()
 
     def handle_http_response(self, original_packet: Packet, response: HTTPResponse) -> None:
         self.log_message("Response code : %s, Set-Cookie header : %s" % (
             self.to_str_safe(response.Status_Code),
             self.to_str_safe(response.Set_Cookie)
         ))
-        response.show()
 
