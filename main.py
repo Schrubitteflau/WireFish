@@ -49,7 +49,7 @@ parser_print_packets.add_argument(
 # Parser for the sniff-data action
 parser_sniff_data = subparsers.add_parser(
     "sniff-data",
-    help="Starts listening the specified interface(s) and analyze the packets with the specified modules"
+    help="Starts listening the specified interface(s) and analyze the packets with the specified module(s)"
 )
 
 parser_sniff_data.add_argument(
