@@ -55,7 +55,6 @@ class FTPPacketParser:
             The first element of the return tuple is the IP address, and the second is the port
         """
         params = self.get_parameters().decode()
-        print(params)
         result = passive_mode_response_regex.search(params)
         if result is not None:
             ip = "{}.{}.{}.{}".format(
@@ -100,7 +99,7 @@ class FTPPassiveModeHandler:
             raw_data: bytes = payload.load
             self._data.extend(raw_data)
             self.last_data_received_time = datetime.now()
-            print("{}:{} => handle payload size : {}".format(self._client_ip, self._client_port, len(payload)))
+            #print("{}:{} => handle payload size : {}".format(self._client_ip, self._client_port, len(payload)))
 
 
 class FTPPassiveModeHandlerCollection:

@@ -30,7 +30,7 @@ class Module(AbstractBaseModule):
             if ftp_packet_parser.is_entering_passive_mode_response():
                 (ip, port) = ftp_packet_parser.get_entering_passive_mode_response_parameters()
                 self._opened_passive_modes.register_handler(client_ip=ip, client_port=port)
-                self._opened_passive_modes.print()
+                #self._opened_passive_modes.print()
 
             # Code "226", example : "226 Directory send OK." 
             elif ftp_packet_parser.is_transfer_done_response():
@@ -42,7 +42,7 @@ class Module(AbstractBaseModule):
 
             # Retrieve (get/download) a file
             elif ftp_packet_parser.is_command("RETR"):
-                filename: str = ftp_packet_parser.get_parameters().decode()
+                filename: str = self.to_str_safe(ftp_packet_parser.get_parameters())
                 self.log_message("RETR {}".format(filename))
                 # Process :
                 # 1 - A PASV command is sent, the server responds with the IP and the PORT the client
@@ -54,7 +54,7 @@ class Module(AbstractBaseModule):
 
             # Upload (store) a file
             elif ftp_packet_parser.is_command("STOR"):
-                filename: str= ftp_packet_parser.get_parameters().decode()
+                filename: str= self.to_str_safe(ftp_packet_parser.get_parameters())
                 self.log_message("STOR {}".format(filename))
                 # Same process as RETR command above
                 last_handler = self._opened_passive_modes.get_last_created_handler()

@@ -86,13 +86,12 @@ try:
         sniff_modules = args.modules.split(",")
         interfaces = get_if_list() if args.interfaces == "ALL" else args.interfaces.split(",")
         actions.sniff_data(
-            sniff_modules=["http.post_credentials", "ftp.credentials", "ftp.transfer_files", "http.download_files"],
-            #sniff_modules=sniff_modules,
+            sniff_modules=sniff_modules,
             interfaces=interfaces,
-            #filter=args.filter
+            filter=None # Not implemented yet
         )
 
 except PermissionError:
     print("You need to be root !")
 
-print(args)
+#print(args)
