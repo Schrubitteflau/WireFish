@@ -110,7 +110,7 @@ class FTPPassiveModeHandlerCollection:
         # Clean FTPPassiveModeHandler instances which haven't be cleaned properly if they
         # didn't receive data for a specified time
         self._scheduler = BackgroundScheduler()
-        self._clean_job = self._scheduler.add_job(self._clean_unused_handlers, 'interval', seconds=1)
+        self._clean_job = self._scheduler.add_job(self._clean_unused_handlers, 'interval', seconds=10)
         self._scheduler.start()
 
     def _clean_unused_handlers(self) -> None:

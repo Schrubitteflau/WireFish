@@ -6,16 +6,14 @@ from util.misc import get_random_string
 
 class Module(AbstractHTTPModule):
 
-    def __init__(self) -> None:
-        super().__init__()
-        self._exclude_content_type = [
-            "text/css",
-            "text/html",
-            "application/javascript",
-            "font/ttf",
-            "font/woff",
-            "font/woff2"
-        ]
+    _exclude_content_type = [
+        "text/css",
+        "text/html",
+        "application/javascript",
+        "font/ttf",
+        "font/woff",
+        "font/woff2"
+    ]
 
     def handle_http_request(self, original_packet: Packet, request: HTTPRequest) -> None:
         pass#request.show()
