@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Optional
 
 from scapy.all import sniff
 
-def print_packets(interfaces: List[str], filter: str = None) -> None:
+def print_packets(interfaces: List[str], filter: Optional[str] = None) -> None:
     # sniff() has count, filter, iface, lfilter, prn, timeout options
     # count : 
     # iface : interface ou liste d'interfaces => "lo" | [ "wlan0", "lo" ]
