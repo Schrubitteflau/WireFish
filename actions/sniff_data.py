@@ -56,7 +56,7 @@ def _process_packet(packet: Packet, modules: ModulesList) -> None:
 # interface : the interface(s) to listen on ("wlan0", "lo", ...)
 # sniff_modules : a comma-separated list of the module(s) to use ("http.post_credentials,ftp.credentials")
 # filter : 
-def sniff_data(interfaces: List[str], sniff_modules: List[str], filter: str = None) -> None:
+def sniff_data(interfaces: List[str], sniff_modules: List[str], filter: Optional[str] = None) -> None:
 
     print("Sniffing interface(s) %s using filter '%s' and module(s) %s" % (
         interfaces,
