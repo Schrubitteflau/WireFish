@@ -1,9 +1,7 @@
 from scapy.all import Packet, Raw
 from scapy.layers.http import HTTPRequest, HTTPResponse
 
-from sniff_modules.AbstractBaseModule import AbstractBaseModule
 from sniff_modules.http.AbstractHTTPModule import AbstractHTTPModule
-from util.packet_analyze.http import HTTPPacketParser
 
 class Module(AbstractHTTPModule):
 

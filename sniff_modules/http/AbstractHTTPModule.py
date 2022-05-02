@@ -1,12 +1,6 @@
-import os
-from typing import Union, Tuple, Any
-from abc import ABC, abstractmethod
-from datetime import datetime
+from abc import abstractmethod
 
-from termcolor import colored
 from scapy.all import Packet
-
-from scapy.all import Packet, Raw
 from scapy.layers.http import HTTPRequest, HTTPResponse
 
 from sniff_modules.AbstractBaseModule import AbstractBaseModule
