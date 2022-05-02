@@ -1,5 +1,4 @@
 from tabulate import tabulate
-
 import netifaces
 
 # Depuis le downgrade de 2.4.5 vers 2.4.4, impossible d'importer les éléments suivants

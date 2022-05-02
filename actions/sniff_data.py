@@ -7,7 +7,7 @@ from sniff_modules.AbstractBaseModule import AbstractBaseModule
 
 ModulesList = List[AbstractBaseModule]
 
-def import_sniff_module(name: str) -> Optional[AbstractBaseModule]:
+def _import_sniff_module(name: str) -> Optional[AbstractBaseModule]:
     to_print = "Loading module %s : " % (colored(name, "yellow"))
 
     def end_with_error(error: str) -> None:
@@ -37,18 +37,18 @@ def import_sniff_module(name: str) -> Optional[AbstractBaseModule]:
         return None
 
 
-def load_sniff_modules(modules_names: List[str]) -> ModulesList:
+def _load_sniff_modules(modules_names: List[str]) -> ModulesList:
     loaded_modules = []
 
     for module_name in modules_names:
-        module = import_sniff_module(module_name)
+        module = _import_sniff_module(module_name)
         if module is not None:
             loaded_modules.append(module)
     
     return loaded_modules
 
 
-def process_packet(packet: Packet, modules: ModulesList) -> None:
+def _process_packet(packet: Packet, modules: ModulesList) -> None:
     for module in modules:
         module.on_receive_packet(packet)
 
@@ -64,7 +64,7 @@ def sniff_data(interfaces: List[str], sniff_modules: List[str], filter: str = No
         sniff_modules
     ))
 
-    loaded_modules = load_sniff_modules(sniff_modules)
+    loaded_modules = _load_sniff_modules(sniff_modules)
 
-    sniff(iface=interfaces, prn=lambda packet: process_packet(packet, loaded_modules))
+    sniff(iface=interfaces, prn=lambda packet: _process_packet(packet, loaded_modules))
 
