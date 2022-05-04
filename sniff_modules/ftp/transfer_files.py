@@ -54,7 +54,7 @@ class Module(AbstractBaseModule):
 
             # Upload (store) a file
             elif ftp_packet_parser.is_command("STOR"):
-                filename: str= self.to_str_safe(ftp_packet_parser.get_parameters())
+                filename: str = self.to_str_safe(ftp_packet_parser.get_parameters())
                 self.log_message("STOR {}".format(filename))
                 # Same process as RETR command above
                 last_handler = self._opened_passive_modes.get_last_created_handler()
